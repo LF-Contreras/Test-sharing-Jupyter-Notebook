@@ -1,75 +1,24 @@
-<header>
+# BayCal_NS-5 v0<br>Bayesian Calibration of NorSand Model-5 parameters
 
-<!--
-  <<< Author notes: Course header >>>
-  Include a 1280×640 image, course title in sentence case, and a concise description in emphasis.
-  In your repository settings: enable template repository, add your 1280×640 social image, auto delete head branches.
-  Add your open source license, GitHub uses MIT license.
--->
+# Notes on BayCal_NS-5
+This Jupiter Notebook includes the Python code used to run the 5-parameter model example presented in the paper:
+- Contreras, L.F., Rojas-Huaroto, H., Halliday, A. and Llano-Serna, M. (2025). Bayesian calibration of NorSand Model parameters using triaxial test data, *Australian Geomechanics*, Special Edition, September 2025.  
 
-# Introduction to GitHub
+## LEGAL
+This software is written in Python code and is © 2025 Luis-Fernando Contreras, Humberto Rojas-Huaroto, Alexandra Haliday & Marcelo Llano-Serna.
 
-_Get started using GitHub in less than an hour._
+Although copyrighted, it is offered as free software ("freeware"); you can redistrubute it and/or modfy it under the terms of the GNU General Public Licenese Version 2 as published by the Free Software Foundation.  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+## Purpose
+The code is structured into two main parts: **NorSand model implementation** (cells [1] to [10]) and **parameter calibration** (cells [11] to [25]).
 
-</header>
+The **first part** focuses on simulating a set of drained and undrained triaxial tests and comparing the model’s predictions with actual laboratory testing results.
 
-<!--
-  <<< Author notes: Step 1 >>>
-  Choose 3-5 steps for your course.
-  The first step is always the hardest, so pick something easy!
-  Link to docs.github.com for further explanations.
-  Encourage users to open new tabs for steps!
--->
+The **second part** performs Bayesian calibration of five NorSand parameters to minimise the difference between model predictions and observed data. The parameters inferred include the elasticity parameters (Gref, m, ν) and the plastic hardening parameters (H0, Hy).
+## Architecture
+To run the code, a **Jupyter Notebook** installation with **Python 3.8** is required, along with the necessary Python packages. The required packages are specified in cells [1] and [11] for Parts 1 and 2, respectively.
 
-## Step 1: Create a branch
+The **first part** of the code simulates a set of triaxial tests using predefined NorSand parameter values, including the five parameters targeted for inference. The input NorSand parameters are specified in cell [3], while the actual triaxial test results used for comparison are provided in a CSV file read in cell [5]. This file must be stored in the same directory as the notebook, and the test data should be sorted alphabetically, following the format of ‘tx_data_FRS_12tests.csv’, which contains Fraser River Sand data for the example case. The model’s predictions are then compared against test data through the graphs generated in cell [10].
 
-_Welcome to "Introduction to GitHub"! :wave:_
+The **second part** of the code calibrates the five NorSand parameters for inference (Gref, m, ν, H0, Hy) by minimising the difference between model predictions and observed data. The valid parameter ranges (priors) and standard deviation bounds for the errors are defined in cell [13], while the input parameters for the Markov Chain Monte Carlo (MCMC) sampling process are specified in cell [15]. A progress bar is displayed during the MCMC analysis (cell [16]), and upon completion, the acceptance rate and processing time are reported. The sampling chains and corner plots of the inferred parameters are displayed in cell [17], followed by tabulated results in cell [19]. Graphs comparing the calibrated model predictions with test data for all the tests are generated in cell [20], while uncertainty bands for H vs. ψ0 and G vs. p’0 are shown in cell [22]. Finally, summary graphs of the calibrated model predictions and experimental data are produced in cells [23] and [24].
 
-**What is GitHub?**: GitHub is a collaboration platform that uses _[Git](https://docs.github.com/get-started/quickstart/github-glossary#git)_ for versioning. GitHub is a popular place to share and contribute to [open-source](https://docs.github.com/get-started/quickstart/github-glossary#open-source) software.
-<br>:tv: [Video: What is GitHub?](https://www.youtube.com/watch?v=pBy1zgt0XPc)
-
-**What is a repository?**: A _[repository](https://docs.github.com/get-started/quickstart/github-glossary#repository)_ is a project containing files and folders. A repository tracks versions of files and folders. For more information, see "[About repositories](https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories)" from GitHub Docs.
-
-**What is a branch?**: A _[branch](https://docs.github.com/en/get-started/quickstart/github-glossary#branch)_ is a parallel version of your repository. By default, your repository has one branch named `main` and it is considered to be the definitive branch. Creating additional branches allows you to copy the `main` branch of your repository and safely make any changes without disrupting the main project. Many people use branches to work on specific features without affecting any other parts of the project.
-
-Branches allow you to separate your work from the `main` branch. In other words, everyone's work is safe while you contribute. For more information, see "[About branches](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches)".
-
-**What is a profile README?**: A _[profile README](https://docs.github.com/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme)_ is essentially an "About me" section on your GitHub profile where you can share information about yourself with the community on GitHub.com. GitHub shows your profile README at the top of your profile page. For more information, see "[Managing your profile README](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme)".
-
-![profile-readme-example](/images/profile-readme-example.png)
-
-### :keyboard: Activity: Your first branch
-
-1. Open a new browser tab and navigate to your newly made repository. Then, work on the steps in your second tab while you read the instructions in this tab.
-2. Navigate to the **< > Code** tab in the header menu of your repository.
-
-   ![code-tab](/images/code-tab.png)
-
-3. Click on the **main** branch drop-down.
-
-   ![main-branch-dropdown](/images/main-branch-dropdown.png)
-
-4. In the field, name your branch `my-first-branch`. In this case, the name must be `my-first-branch` to trigger the course workflow.
-5. Click **Create branch: my-first-branch** to create your branch.
-
-   ![create-branch-button](/images/create-branch-button.png)
-
-   The branch will automatically switch to the one you have just created.
-   The **main** branch drop-down bar will reflect your new branch and display the new branch name.
-
-6. Wait about 20 seconds then refresh this page (the one you're following instructions from). [GitHub Actions](https://docs.github.com/en/actions) will automatically update to the next step.
-
-<footer>
-
-<!--
-  <<< Author notes: Footer >>>
-  Add a link to get support, GitHub status page, code of conduct, license link.
--->
-
----
-
-Get help: [Post in our discussion board](https://github.com/orgs/skills/discussions/categories/introduction-to-github) &bull; [Review the GitHub status page](https://www.githubstatus.com/)
-
-&copy; 2024 GitHub &bull; [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md) &bull; [MIT License](https://gh.io/mit)
-
-</footer>
+The Jupyter Notebook provides a general description of each part of the code, with extensive comments explaining the content of individual cells. The complete set of results from the calibration examples discussed in the paper is also included. The programming approach prioritizes methodological clarity over computational efficiency. Some elements of the plots, such as axis scales and color palettes, are tailored to the 12-test example dataset and may require adjustments when using different datasets.
